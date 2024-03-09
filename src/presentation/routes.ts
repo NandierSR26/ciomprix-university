@@ -7,6 +7,9 @@ export class AppRoutes {
     const router = Router();
     
     // Definir las rutas
+    router.get('/index', (req, res) => {
+      res.send({ message: 'Hola mundo' })
+    })
   
     return router;
   }
