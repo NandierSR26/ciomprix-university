@@ -12,3 +12,59 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Students {
+  id String  @id @default(uuid())
+  DNI Int @unique
+  first_name String
+  last_name String
+  email String
+  passowrd String
+  phone String
+  birth_date String
+  rol ValidRoles @default(STUDENT)
+  subjects Estudiantes_asignaturas[]
+}
+
+model Admin {
+  id String @id @default(uuid())
+  username String
+  password String
+  rol ValidRoles @default(ADMIN)
+}
+
+model Subjects {
+  id String @id @default(uuid())
+  name String
+  description String
+  students Estudiantes_asignaturas[]
+  evidences Evidences[]
+}
+
+model Estudiantes_asignaturas {
+  id_student String
+  id_subject String
+  student Students @relation(fields: [id_student], references: [id])
+  asignarura Subjects @relation(fields: [id_subject], references: [id])
+
+  @@id([id_student, id_subject])
+}
+
+model Evidences {
+  id String @id @default(uuid())
+  name String
+  size Int
+  format String
+  date String
+  subject Subjects @relation(fields: [id], references: [id])
+}
+
+model Roles {
+  id String @id @default(uuid())
+  rol ValidRoles
+}
+
+enum ValidRoles {
+  ADMIN
+  STUDENT
+}
