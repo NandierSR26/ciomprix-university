@@ -34,7 +34,7 @@ export class StudentController {
 
     const [error, createStudentDTO] = CreateStudentDTO.create(req.body);
     if (error) {
-      return handleError({ code: 400, message: 'Someting went wrong', res })
+      return handleError({ code: 400, message: error, res })
     }
 
     new CreateStudent(this.studentRepository)
