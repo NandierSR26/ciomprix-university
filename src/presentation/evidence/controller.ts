@@ -8,14 +8,19 @@ import { CreateEvidence } from '../../domain/evidences/useCases/create';
 import { UpdateEvidencesDTO } from '../../domain/evidences/dtos/update.dto';
 import { UpdateEvidence } from '../../domain/evidences/useCases/update';
 import { DeleteEvidence } from '../../domain/evidences/useCases/delete';
-import { FileUploadService } from '../services/file-upload.service';
-import { UploadedFile } from 'express-fileupload';
+import { formatDate } from '../utils/format-date';
 
 export class EvidencesController {
 
+  private validFormats = [
+    'image/png',
+    'image/jpg',
+    'image/jpeg',
+    'application/pdf'
+  ]
+
   constructor(
     private readonly evidencesRepository: EvidenceRepository,
-    private readonly fileUploadService: FileUploadService
   ) { }
 
   public getAllEvidences = (req: Request, res: Response) => {
@@ -36,16 +41,22 @@ export class EvidencesController {
 
   public createEvidence = (req: Request, res: Response) => {
 
-    const files = req.body.files as UploadedFile[];
-    console.log(files)
+    const { filename, size, mimetype } = req.file!;
+    const { subject_id, student_id } = req.body;
 
-    if (files.length > 5) throw new Error('You can only upload 5 files per subject')
-    
-    this.fileUploadService.uploadMultiple( files, `public/uploads/` )
-      .then( uploaded => handleSuccess({code: 200, message: 'Evidence created', res, data: uploaded}) )
-      .catch(  error => handleError({ code: 500, message: 'Internal server error', res, error }))
+    const evidenceData = {
+      name: filename,
+      size: size/1000,
+      format: mimetype,
+      date: formatDate(Date.now()),
+      subject_id,
+      student_id
+    }
 
-    const [error, createEvidenceDTO] = CreateEvidenceDTO.create(req.body);
+    if(!this.validFormats.includes(mimetype)) return handleError({ code: 400, message: 'File format not allowed', res });
+
+
+    const [error, createEvidenceDTO] = CreateEvidenceDTO.create(evidenceData);
     if (error) return handleError({ code: 400, message: error!, res, error });
 
     new CreateEvidence(this.evidencesRepository)
@@ -56,11 +67,22 @@ export class EvidencesController {
 
   public updateEvidence = (req: Request, res: Response) => {
     const { id } = req.params;
-    const [ error, updateEvidenceDTO ] = UpdateEvidencesDTO.create({ ...req.body, id });
-    if( error ) return handleError({ code: 400, message: error!, res, error });
-    
-    new UpdateEvidence( this.evidencesRepository )
-      .execute( updateEvidenceDTO! )
+    const { filename, size, mimetype } = req.file!;
+
+    const evidenceData = {
+      name: filename,
+      size: size/1000,
+      format: mimetype,
+      date: formatDate(Date.now()),
+    }
+
+    if(!this.validFormats.includes(mimetype)) return handleError({ code: 400, message: 'File format not allowed', res });
+
+    const [error, updateEvidenceDTO] = UpdateEvidencesDTO.create({ evidenceData, id });
+    if (error) return handleError({ code: 400, message: error!, res, error });
+
+    new UpdateEvidence(this.evidencesRepository)
+      .execute(updateEvidenceDTO!)
       .then(data => handleSuccess({ code: 200, message: `Evidence with ID ${id} updated`, res, data }))
       .catch(error => handleError({ code: 500, message: error, res }))
 
@@ -69,8 +91,8 @@ export class EvidencesController {
   public deleteEvidence = (req: Request, res: Response) => {
     const { id } = req.params;
 
-    new DeleteEvidence( this.evidencesRepository )
-      .execute( id )
+    new DeleteEvidence(this.evidencesRepository)
+      .execute(id)
       .then(data => handleSuccess({ code: 200, message: `Evidence with ID ${id} deleted`, res, data }))
       .catch(error => handleError({ code: 500, message: error, res }))
   }

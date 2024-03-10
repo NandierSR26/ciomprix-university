@@ -3,10 +3,10 @@ export class UpdateEvidencesDTO {
 
   constructor(
     public readonly id: string,
-    public readonly name: string,
-    public readonly size: number,
-    public readonly format: string,
-    public readonly date: string,
+    public readonly name?: string,
+    public readonly size?: number,
+    public readonly format?: string,
+    public readonly date?: string,
   ) { }
 
   get values() {
@@ -25,10 +25,6 @@ export class UpdateEvidencesDTO {
     const { id, name, size, format, date } = object;
 
     if (!id) return ['id is required'];
-    if (!name) return ['name is required'];
-    if (!size) return ['size is required'];
-    if (!format) return ['format is required'];
-    if (!date) return ['date is required'];
 
     return [undefined, new UpdateEvidencesDTO(id, name, size, format, date)];
   }

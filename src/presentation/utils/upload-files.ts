@@ -1,8 +1,8 @@
-import multer, { Multer } from "multer";
+import multer, { Multer, MulterError } from "multer";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { envs } from "../../config/envs";
-import { Request } from "express";
+import { NextFunction, Request, Response } from "express";
 
 // const storage = multer.diskStorage({
 //     destination: function(req, file, cb) {
@@ -25,7 +25,7 @@ const storage = multer.diskStorage(
   {
     destination: function (req, file, cb) {
       const currentDirectory = __dirname;
-      const path = join(currentDirectory, '../../public');
+      const path = join(currentDirectory, '../../../public');
       cb(null, path)
     },
     filename: function (req, file, cb) {
@@ -38,15 +38,17 @@ const storage = multer.diskStorage(
 
 export const upload = multer({
   storage: storage,
-  limits: {
-    fileSize: 10 * 1024 * 1024 
-  },
+  // limits: {
+  //   fileSize: 1 * 1024 * 1024 
+  // },
   // fileFilter(req, file, cb) {
-  //   const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  //   const allowedTypes = ['image/jpeg', 'image/gif'];
   //   if (allowedTypes.includes(file.mimetype)) {
   //     cb(null, true);
   //   } else {
-  //     cb(new Error('Tipo de archivo no admitido'));
+  //     cb(null, false);
+  //     throw new Error('formato no valido')
   //   }
   // },
 });
+

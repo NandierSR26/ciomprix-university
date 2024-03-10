@@ -14,7 +14,7 @@ export class AppRoutes {
     // Definir las rutas
     router.use('/api/auth', AuthRoutes.routes);
 
-    // router.use('/', AuthMiddleware.validateJWT)
+    router.use('/', AuthMiddleware.validateJWT)
     router.use('/api/students', StudentRoutes.routes);
     router.use('/api/subjects', SubjectRoutes.routes);
     router.use('/api/evidences', EvidencesRoutes.routes);

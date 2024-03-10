@@ -3,6 +3,7 @@ import { SubjectRepositoryImplementation } from "../../infraestucture/subjects/r
 import { SubjectDataSourceImplementation } from "../../infraestucture/subjects/dataSources/subject.datasource";
 import { SubjectController } from "./controller";
 import { ValidateEnroll } from "../middlewares/validate-enroll";
+import { RolMiddleware } from "../middlewares/rol-middleware";
 
 export class SubjectRoutes {
 
@@ -14,7 +15,7 @@ export class SubjectRoutes {
 
     const router = Router();
 
-    router.get('/', subjectController.getAllSubjects);
+    router.get('/', RolMiddleware.verifyUserRol, subjectController.getAllSubjects);
     router.get('/:id', subjectController.GetSubjectByID);
     router.get('/by-user/:id', subjectController.getSubjectsByUser);
 
@@ -24,9 +25,9 @@ export class SubjectRoutes {
       ValidateEnroll.validateAmountEnrolledSubject
     ], subjectController.enrollStudent);
 
-    router.put('/:id', subjectController.updateSubject);
+    router.put('/:id', RolMiddleware.verifyUserRol, subjectController.updateSubject);
 
-    router.delete('/:id', subjectController.deleteSubject);
+    router.delete('/:id', RolMiddleware.verifyUserRol, subjectController.deleteSubject);
 
     return router
   }

@@ -33,8 +33,10 @@ export class EvidencesDataSourceImplementation implements EvidenceDataSource {
   async update(dto: UpdateEvidencesDTO): Promise<EvidenceIdentity> {
     const updatedEvidence = await prisma.evidences.update({
       where: { id: dto.id },
-      data: dto!.values
+      data: dto.values
     });
+
+    console.log({dto})
 
     return updatedEvidence;
   }

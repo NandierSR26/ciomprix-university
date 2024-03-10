@@ -24,6 +24,7 @@ model Students {
   birth_date String
   rol ValidRoles @default(STUDENT)
   subjects Estudiantes_asignaturas[]
+  evidences Evidences[]
 }
 
 model Admin {
@@ -58,7 +59,10 @@ model Evidences {
   size Int
   format String
   date String
-  subject Subjects @relation(fields: [id], references: [id])
+  subject Subjects @relation(fields: [subject_id], references: [id])
+  student Students @relation(fields: [student_id], references: [id])
+  subject_id String
+  student_id String
 }
 
 model Roles {
