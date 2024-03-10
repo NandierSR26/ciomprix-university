@@ -35,7 +35,7 @@ model Admin {
 
 model Subjects {
   id String @id @default(uuid())
-  name String
+  name String @unique
   description String
   students Estudiantes_asignaturas[]
   evidences Evidences[]
