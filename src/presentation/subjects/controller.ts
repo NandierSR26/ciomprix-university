@@ -10,6 +10,7 @@ import { UpdateSubject } from "../../domain/subjects/useCases/update";
 import { DeleteSubject } from "../../domain/subjects/useCases/delete";
 import { EnrollStudentDTO } from "../../domain/subjects/dtos/enroll-student.dto";
 import { EnrollStudent } from "../../domain/subjects/useCases/enroll-student";
+import { GetSubjectsByUser } from "../../domain/subjects/useCases/getByUser";
 
 
 export class SubjectController {
@@ -31,6 +32,16 @@ export class SubjectController {
       .execute( req.params.id )
       .then( data => handleSuccess({ code: 200, message: 'Subjects found', res, data }) )
       .catch( error => handleError({ code: 500, message: error, res, error }) )
+  }
+
+  public getSubjectsByUser = (req: Request, res: Response) => {
+    
+    const { id } = req.params;
+
+    new GetSubjectsByUser( this.subjectRepository )
+      .execute( id )
+        .then( data => handleSuccess({ code: 200, message: `Subjects of user ${id}`, res, data }) )
+        .catch( error => handleError({ code: 500, message: error, res, error }) )
   }
 
   public CreateSubject = (req: Request, res: Response) => {

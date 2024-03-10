@@ -2,6 +2,7 @@ import { prisma } from "../../../data/mysql/prisma";
 import { SubjectDataSource } from "../../../domain/subjects/dataSources/subject.datasource";
 import { CreateSubjectDTO } from "../../../domain/subjects/dtos/create.dto";
 import { UpdateSubjectDTO } from "../../../domain/subjects/dtos/update.dto";
+import { EnrollSubjectEntity } from "../../../domain/subjects/entities/enroll.entity";
 import { SubjectEntity } from "../../../domain/subjects/entities/subject.entity";
 
 export class SubjectDataSourceImplementation implements SubjectDataSource {
@@ -20,6 +21,25 @@ export class SubjectDataSourceImplementation implements SubjectDataSource {
 
     if (!subject) throw(`Subject with ID ${id} not found`)
     return subject;
+  }
+
+  async getByUser(id_user: string): Promise<EnrollSubjectEntity[]> {
+    const subjectsByUser = await prisma.estudiantes_asignaturas.findMany({
+      where: {
+        id_student: id_user
+      },
+      include: {
+        asignarura: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+          }
+        }
+      }
+    })
+
+    return subjectsByUser;
   }
 
   async create( dto: CreateSubjectDTO ): Promise<SubjectEntity> {

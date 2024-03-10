@@ -1,6 +1,7 @@
 import { SubjectDataSource } from "../../../domain/subjects/dataSources/subject.datasource";
 import { CreateSubjectDTO } from "../../../domain/subjects/dtos/create.dto";
 import { UpdateSubjectDTO } from "../../../domain/subjects/dtos/update.dto";
+import { EnrollSubjectEntity } from "../../../domain/subjects/entities/enroll.entity";
 import { SubjectEntity } from "../../../domain/subjects/entities/subject.entity";
 import { SubjectRepository } from "../../../domain/subjects/repositories/subject.repository";
 
@@ -16,8 +17,12 @@ export class SubjectRepositoryImplementation implements SubjectRepository {
   }
   getByID(id: string): Promise<SubjectEntity> {
     return this.dataSource.getByID( id );
-    
   }
+
+  getByUser(id_user: string): Promise<EnrollSubjectEntity[]> {
+    return this.dataSource.getByUser( id_user )
+  }
+
   create(dto: CreateSubjectDTO): Promise<SubjectEntity> {
     return this.dataSource.create( dto );
     

@@ -16,6 +16,7 @@ export class SubjectRoutes {
 
     router.get('/', subjectController.getAllSubjects);
     router.get('/:id', subjectController.GetSubjectByID);
+    router.get('/by-user/:id', subjectController.getSubjectsByUser);
 
     router.post('/', subjectController.CreateSubject);
     router.post('/enroll', [ 
