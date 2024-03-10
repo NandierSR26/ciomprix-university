@@ -46,14 +46,14 @@ export class EvidencesController {
 
     const evidenceData = {
       name: filename,
-      size: size/1000,
+      size: size / 1000,
       format: mimetype,
       date: formatDate(Date.now()),
       subject_id,
       student_id
     }
 
-    if(!this.validFormats.includes(mimetype)) return handleError({ code: 400, message: 'File format not allowed', res });
+    if (!this.validFormats.includes(mimetype)) return handleError({ code: 400, message: 'File format not allowed', res });
 
 
     const [error, createEvidenceDTO] = CreateEvidenceDTO.create(evidenceData);
@@ -71,12 +71,12 @@ export class EvidencesController {
 
     const evidenceData = {
       name: filename,
-      size: size/1000,
+      size: size / 1000,
       format: mimetype,
       date: formatDate(Date.now()),
     }
 
-    if(!this.validFormats.includes(mimetype)) return handleError({ code: 400, message: 'File format not allowed', res });
+    if (!this.validFormats.includes(mimetype)) return handleError({ code: 400, message: 'File format not allowed', res });
 
     const [error, updateEvidenceDTO] = UpdateEvidencesDTO.create({ evidenceData, id });
     if (error) return handleError({ code: 400, message: error!, res, error });
@@ -95,6 +95,30 @@ export class EvidencesController {
       .execute(id)
       .then(data => handleSuccess({ code: 200, message: `Evidence with ID ${id} deleted`, res, data }))
       .catch(error => handleError({ code: 500, message: error, res }))
+  }
+
+  public evidencesPercentageByFormat = (req: Request, res: Response) => {
+    new GetAllEvidences(this.evidencesRepository)
+      .execute()
+      .then((data) => {
+        var totalEvidences = data.length;
+        var evidencesByFormat: { [key: string]: number } = {};
+
+        data.forEach(evidence => {
+          if(isNaN( evidencesByFormat[evidence.format] )) evidencesByFormat[evidence.format] = 0
+          evidencesByFormat[evidence.format] += 1
+        })
+
+        var percentageFormat = Object.values( evidencesByFormat ).map( (format, i) => {
+          var keys = Object.keys( evidencesByFormat )
+          return {
+            [keys[i].split('/')[1]]: (format*100)/totalEvidences + '%'
+          }
+        })
+
+        handleSuccess({ code: 200, message: 'List evidences', res, data: percentageFormat })
+      })
+      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
   }
 
 

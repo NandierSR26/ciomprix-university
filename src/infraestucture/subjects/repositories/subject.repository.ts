@@ -11,6 +11,10 @@ export class SubjectRepositoryImplementation implements SubjectRepository {
     private readonly dataSource: SubjectDataSource
   ) {}
 
+  evidenceBySubject(): Promise<SubjectEntity[]> {
+    return this.dataSource.evidenceBySubject();
+  }
+
   getAll(): Promise<SubjectEntity[]> {
     return this.dataSource.getAll();
     

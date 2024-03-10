@@ -1,3 +1,4 @@
+import { handleError } from "../../../config/handleResponse";
 import { prisma } from "../../../data/mysql/prisma";
 import { EvidenceDataSource } from "../../../domain/evidences/dataSources/evidence.datasource";
 import { CreateEvidenceDTO } from "../../../domain/evidences/dtos/create.dto";
@@ -7,7 +8,11 @@ import { EvidenceIdentity } from "../../../domain/evidences/entities/evidence.en
 export class EvidencesDataSourceImplementation implements EvidenceDataSource {
 
   async getAll(): Promise<EvidenceIdentity[]> {
-    const evidences = await prisma.evidences.findMany();
+    const evidences = await prisma.evidences.findMany({
+      orderBy: {
+        date: "asc",
+      }
+    });
     return evidences;
   }
 
@@ -23,6 +28,21 @@ export class EvidencesDataSourceImplementation implements EvidenceDataSource {
   }
 
   async create(dto: CreateEvidenceDTO): Promise<EvidenceIdentity> {
+
+    const { subject_id } = dto;
+    const subject = await prisma.subjects.findUnique({
+      where: {id: subject_id},
+      include: {
+        evidences: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+
+    if( subject!.evidences!.length >= 5 ) throw('You cannot create more than 5 pieces of evidence in a subject');
+
     const newEvidence = await prisma.evidences.create({
       data: dto
     });
@@ -35,8 +55,6 @@ export class EvidencesDataSourceImplementation implements EvidenceDataSource {
       where: { id: dto.id },
       data: dto.values
     });
-
-    console.log({dto})
 
     return updatedEvidence;
   }

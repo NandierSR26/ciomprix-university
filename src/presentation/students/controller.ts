@@ -8,6 +8,9 @@ import { UpdateStudenDTO } from "../../domain/students/dtos/update.dto";
 import { UpdateStudent } from "../../domain/students/useCases/update";
 import { GetStudentByID } from "../../domain/students/useCases/getByID";
 import { DeleteStudent } from "../../domain/students/useCases/delete";
+import { CreateAdminDTO } from "../../domain/students/dtos/create-admin.dto";
+import { CreateAdmin } from "../../domain/students/useCases/create-admin";
+import { TopStudentsWithEvidences } from "../../domain/students/useCases/top-students";
 
 export class StudentController {
 
@@ -45,7 +48,27 @@ export class StudentController {
       })
   }
 
+  public createAdmin = (req: Request, res: Response) => {
+    const [error, createAdminDTO] = CreateAdminDTO.create(req.body);
+    if (error) {
+      return handleError({ code: 400, message: error, res })
+    }
+
+    new CreateAdmin(this.studentRepository)
+      .execute(createAdminDTO!)
+      .then(student => handleSuccess({ code: 200, message: 'Admin created', res, data: student }))
+      .catch(error => {
+        handleError({ code: 500, message: error, res, error })
+      })
+  }
+
   public updateStudent = (req: Request, res: Response) => {
+
+    const { user } = req.body;
+    const { id } = req.params;
+
+    if (user.id !== id) return handleError({ code: 401, message: 'You cannot edit this account', res });
+
     const [error, updatedStudentDTO] = UpdateStudenDTO.create({ ...req.body, id: req.params.id });
     if (error) return handleError({ code: 400, message: 'Something went wrong', res });
 
@@ -56,10 +79,39 @@ export class StudentController {
   }
 
   public deleteStudent = (req: Request, res: Response) => {
-    new DeleteStudent( this.studentRepository )
-      .execute( req.params.id )
-      .then(data => handleSuccess({ code: 200, message: `Students ${ req.params.id } deleted`, res, data }))
+
+    const { user } = req.body;
+    const { id } = req.params;
+
+    if (user.id !== id) return handleError({ code: 401, message: 'You cannot delete this account', res });
+
+    new DeleteStudent(this.studentRepository)
+      .execute(req.params.id)
+      .then(data => handleSuccess({ code: 200, message: `Students ${req.params.id} deleted`, res, data }))
       .catch(error => handleError({ code: 500, message: error, res, error }))
+  }
+
+  public topStudentsWithEvidences = (req: Request, res: Response) => {
+    new TopStudentsWithEvidences(this.studentRepository)
+      .execute()
+      .then((data) => {
+
+        var topStudents = data.map( (student:any) => {
+          return {
+            id: student.id,
+            name: student.first_name + ' ' + student.last_name,
+            evidences: student.evidences.length
+          }
+        } )
+
+        handleSuccess({ 
+          code: 200, 
+          message: 'Top students', 
+          res, 
+          data: topStudents.sort((a,b) => b.evidences - a.evidences)
+        })
+
+      })
   }
 
 }

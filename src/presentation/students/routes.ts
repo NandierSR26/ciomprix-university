@@ -14,8 +14,9 @@ export class StudentRoutes {
     const studentsController = new StudentController( studentRepository );
 
     router.get('/', RolMiddleware.verifyUserRol, studentsController.getAllStudents);
+    router.get('/top-students', studentsController.topStudentsWithEvidences)
     router.get('/:id', studentsController.getStudentByID);
-    router.post('/', RolMiddleware.verifyUserRol, studentsController.CreateStudent);
+    // router.post('/', RolMiddleware.verifyUserRol, studentsController.CreateStudent);
     router.put('/:id', studentsController.updateStudent);
     router.delete('/:id', studentsController.deleteStudent)
 

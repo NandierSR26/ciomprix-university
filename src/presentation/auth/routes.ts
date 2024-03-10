@@ -14,12 +14,12 @@ export class AuthRoutes {
     const router = Router();
 
     const dataSource = new LoginDataSourceImplementation()
-    const loginRepository = new LoginRepositoryImplementation( dataSource )
-    const authController = new AuthControllers( loginRepository )
+    const loginRepository = new LoginRepositoryImplementation(dataSource)
+    const authController = new AuthControllers(loginRepository)
 
     const dataSourceStudents = new StudentDataSourceImplementation();
-    const studentRepository = new StudentRepositoryImplementation( dataSourceStudents );
-    const studentController = new StudentController( studentRepository )
+    const studentRepository = new StudentRepositoryImplementation(dataSourceStudents);
+    const studentController = new StudentController(studentRepository)
 
     router.post('/login', [
       validateUsersExists.validateEmailExistsLogin
@@ -27,8 +27,12 @@ export class AuthRoutes {
 
     router.post('/register', [
       validateUsersExists.validateDNI,
-      validateUsersExists. validateEmail,
+      validateUsersExists.validateEmail,
     ], studentController.CreateStudent);
+
+    router.post('/register-admin', [
+      validateUsersExists.validateEmail,
+    ], studentController.createAdmin);
 
     return router;
 

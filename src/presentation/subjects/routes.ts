@@ -18,6 +18,7 @@ export class SubjectRoutes {
     router.get('/', RolMiddleware.verifyUserRol, subjectController.getAllSubjects);
     router.get('/:id', subjectController.GetSubjectByID);
     router.get('/by-user/:id', subjectController.getSubjectsByUser);
+    router.get('/evidences/by-subject', subjectController.evidenceBySubject);
 
     router.post('/', subjectController.CreateSubject);
     router.post('/enroll', [ 

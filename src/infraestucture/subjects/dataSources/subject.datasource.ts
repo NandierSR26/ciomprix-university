@@ -76,4 +76,14 @@ export class SubjectDataSourceImplementation implements SubjectDataSource {
     })
   }
 
+  async evidenceBySubject(): Promise<SubjectEntity[]> {
+    const evidencesVySubject = await prisma.subjects.findMany({
+      include: {
+        evidences: true
+      }
+    })
+
+    return evidencesVySubject
+  }
+
 }

@@ -11,4 +11,6 @@ export abstract class SubjectRepository {
   abstract updateByID( dto: UpdateSubjectDTO ): Promise<SubjectEntity>;
   abstract delete( id: string ): Promise<SubjectEntity>;
   abstract enrollStudent( studentID: string, subjectID: string ): Promise<void>;
+  abstract evidenceBySubject(): Promise<SubjectEntity[]>;
+
 }
