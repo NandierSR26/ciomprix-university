@@ -5,7 +5,7 @@ import { UpdateSubjectDTO } from "../../../domain/subjects/dtos/update.dto";
 import { SubjectEntity } from "../../../domain/subjects/entities/subject.entity";
 
 export class SubjectDataSourceImplementation implements SubjectDataSource {
-
+  
   async getAll(): Promise<SubjectEntity[]> {
     const subjects = await prisma.subjects.findMany();
     return subjects;
@@ -45,6 +45,15 @@ export class SubjectDataSourceImplementation implements SubjectDataSource {
     });
 
     return deletedSubject;
+  }
+
+  async enrollStudent(studentID: string, subjectID: string): Promise<void> {
+    await prisma.estudiantes_asignaturas.create({ 
+      data: { 
+        id_student: studentID,
+        id_subject: subjectID
+      } 
+    })
   }
 
 }

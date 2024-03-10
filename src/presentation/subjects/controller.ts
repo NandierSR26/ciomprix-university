@@ -8,6 +8,8 @@ import { CreateSubject } from "../../domain/subjects/useCases/create";
 import { UpdateSubjectDTO } from "../../domain/subjects/dtos/update.dto";
 import { UpdateSubject } from "../../domain/subjects/useCases/update";
 import { DeleteSubject } from "../../domain/subjects/useCases/delete";
+import { EnrollStudentDTO } from "../../domain/subjects/dtos/enroll-student.dto";
+import { EnrollStudent } from "../../domain/subjects/useCases/enroll-student";
 
 
 export class SubjectController {
@@ -58,6 +60,18 @@ export class SubjectController {
     new DeleteSubject( this.subjectRepository )
       .execute( req.params.id )
       .then( data => handleSuccess({ code: 200, message: `Subject ${req.params.id} deleted`, res, data }) )
+      .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
+  }
+
+  public enrollStudent = (req: Request, res: Response) => {
+    const { id_student, id_subject } = req.body;
+
+    const [error, enrollSubjectDTO] = EnrollStudentDTO.create({ id_student, id_subject });
+    if(error) return handleError({ code:400, message: error!, res  });
+
+    new EnrollStudent( this.subjectRepository )
+      .execute( id_student, id_subject )
+      .then( data => handleSuccess({ code: 200, message: `User enrolled`, res, data }) )
       .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
   }
 

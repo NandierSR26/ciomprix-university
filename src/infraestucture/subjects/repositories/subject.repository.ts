@@ -28,7 +28,10 @@ export class SubjectRepositoryImplementation implements SubjectRepository {
 
   delete(id: string): Promise<SubjectEntity> {
     return this.dataSource.delete( id );
-    
+  }
+
+  enrollStudent(studentID: string, subjectID: string): Promise<void> {
+    return this.dataSource.enrollStudent( studentID, subjectID )
   }
 
 }

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { SubjectRepositoryImplementation } from "../../infraestucture/subjects/repositories/subject.repository";
 import { SubjectDataSourceImplementation } from "../../infraestucture/subjects/dataSources/subject.datasource";
 import { SubjectController } from "./controller";
+import { ValidateEnroll } from "../middlewares/validate-enroll";
 
 export class SubjectRoutes {
 
@@ -15,8 +16,15 @@ export class SubjectRoutes {
 
     router.get('/', subjectController.getAllSubjects);
     router.get('/:id', subjectController.GetSubjectByID);
+
     router.post('/', subjectController.CreateSubject);
+    router.post('/enroll', [ 
+      ValidateEnroll.validateStudentInSubject,
+      ValidateEnroll.validateAmountEnrolledSubject
+    ], subjectController.enrollStudent);
+
     router.put('/:id', subjectController.updateSubject);
+
     router.delete('/:id', subjectController.deleteSubject);
 
     return router

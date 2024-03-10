@@ -41,7 +41,6 @@ export class StudentController {
       .execute(createStudentDTO!)
       .then(student => handleSuccess({ code: 200, message: 'Student created', res, data: student }))
       .catch(error => {
-        console.log(error);
         handleError({ code: 500, message: 'Internal server error', res, error })
       })
   }
