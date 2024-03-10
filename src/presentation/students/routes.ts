@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { StudentController } from "./controller";
-import { StudentDataSourceImplementation } from "../../infraestucture/dataSources/student.datasource";
-import { StudentRepositoryImplementation } from "../../infraestucture/repositories/student.repository";
+import { StudentDataSourceImplementation } from "../../infraestucture/students/dataSources/student.datasource";
+import { StudentRepositoryImplementation } from "../../infraestucture/students/repositories/student.repository";
 
 export class StudentRoutes {
 

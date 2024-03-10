@@ -1,8 +1,8 @@
-import { prisma } from "../../data/mysql/prisma";
-import { StudentDataSource } from "../../domain/students/dataSources/student.datasource";
-import { CreateStudentDTO } from "../../domain/students/dtos/create.dto";
-import { UpdateStudenDTO } from "../../domain/students/dtos/update.dto";
-import { StudentEntity } from "../../domain/students/entities/student.entity";
+import { prisma } from "../../../data/mysql/prisma";
+import { StudentDataSource } from "../../../domain/students/dataSources/student.datasource";
+import { CreateStudentDTO } from "../../../domain/students/dtos/create.dto";
+import { UpdateStudenDTO } from "../../../domain/students/dtos/update.dto";
+import { StudentEntity } from "../../../domain/students/entities/student.entity";
 
 export class StudentDataSourceImplementation implements StudentDataSource {
   

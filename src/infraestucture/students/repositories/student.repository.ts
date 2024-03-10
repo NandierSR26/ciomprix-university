@@ -1,8 +1,8 @@
-import { StudentDataSource } from "../../domain/students/dataSources/student.datasource";
-import { CreateStudentDTO } from "../../domain/students/dtos/create.dto";
-import { UpdateStudenDTO } from "../../domain/students/dtos/update.dto";
-import { StudentEntity } from "../../domain/students/entities/student.entity";
-import { StudentRepository } from "../../domain/students/repositories/student.repository";
+import { StudentDataSource } from "../../../domain/students/dataSources/student.datasource";
+import { CreateStudentDTO } from "../../../domain/students/dtos/create.dto";
+import { UpdateStudenDTO } from "../../../domain/students/dtos/update.dto";
+import { StudentEntity } from "../../../domain/students/entities/student.entity";
+import { StudentRepository } from "../../../domain/students/repositories/student.repository";
 
 
 export class StudentRepositoryImplementation implements StudentRepository {

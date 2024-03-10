@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { StudentRoutes } from './students/routes';
+import { SubjectRoutes } from './subjects/routes';
 
 export class AppRoutes {
 
@@ -8,11 +9,8 @@ export class AppRoutes {
     const router = Router();
     
     // Definir las rutas
-    router.get('/index', (req, res) => {
-      res.send({ message: 'Hola mundo' })
-    })
-
-    router.use('/api/students', StudentRoutes.routes)
+    router.use('/api/students', StudentRoutes.routes);
+    router.use('/api/subjects', SubjectRoutes.routes);
   
     return router;
   }
