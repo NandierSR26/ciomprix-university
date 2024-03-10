@@ -18,7 +18,7 @@ export class EvidencesDataSourceImplementation implements EvidenceDataSource {
       }
     });
 
-    if(!evidence) throw new Error(`Evidence with ID ${id} not found`);
+    if(!evidence) throw(`Evidence with ID ${id} not found`);
     return evidence
   }
 

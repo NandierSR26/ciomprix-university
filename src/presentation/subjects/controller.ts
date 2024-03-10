@@ -22,7 +22,7 @@ export class SubjectController {
     new GetAllSubjects( this.subjectRepository )
       .execute()
       .then( data => handleSuccess({ code: 200, message: 'Subjects List', res, data }) )
-      .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
+      .catch( error => handleError({ code: 500, message: error, res, error }) )
 
   }
 
@@ -30,7 +30,7 @@ export class SubjectController {
     new GetSubjectByID( this.subjectRepository )
       .execute( req.params.id )
       .then( data => handleSuccess({ code: 200, message: 'Subjects found', res, data }) )
-      .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
+      .catch( error => handleError({ code: 500, message: error, res, error }) )
   }
 
   public CreateSubject = (req: Request, res: Response) => {
@@ -40,7 +40,7 @@ export class SubjectController {
     new CreateSubject( this.subjectRepository )
       .execute( createSubjectDTO! )
       .then( data => handleSuccess({ code: 200, message: 'Subject created', res, data }) )
-      .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
+      .catch( error => handleError({ code: 500, message: error, res, error }) )
   }
 
   public updateSubject = (req: Request, res: Response) => {
@@ -51,7 +51,7 @@ export class SubjectController {
     new UpdateSubject( this.subjectRepository )
       .execute( updateSubjectDTO! )
       .then( data => handleSuccess({ code: 200, message: `Subject ${req.params.id} updated`, res, data }) )
-      .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
+      .catch( error => handleError({ code: 500, message: error, res, error }) )
 
   }
 
@@ -60,7 +60,7 @@ export class SubjectController {
     new DeleteSubject( this.subjectRepository )
       .execute( req.params.id )
       .then( data => handleSuccess({ code: 200, message: `Subject ${req.params.id} deleted`, res, data }) )
-      .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
+      .catch( error => handleError({ code: 500, message: error, res, error }) )
   }
 
   public enrollStudent = (req: Request, res: Response) => {
@@ -72,7 +72,7 @@ export class SubjectController {
     new EnrollStudent( this.subjectRepository )
       .execute( id_student, id_subject )
       .then( data => handleSuccess({ code: 200, message: `User enrolled`, res, data }) )
-      .catch( error => handleError({ code: 500, message: 'Internal server error', res, error }) )
+      .catch( error => handleError({ code: 500, message: error, res, error }) )
   }
 
 

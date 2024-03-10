@@ -18,7 +18,7 @@ export class SubjectDataSourceImplementation implements SubjectDataSource {
       }
     });
 
-    if (!subject) throw new Error(`Subject with ID ${id} not found`)
+    if (!subject) throw(`Subject with ID ${id} not found`)
     return subject;
   }
 

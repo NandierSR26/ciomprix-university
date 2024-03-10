@@ -19,14 +19,14 @@ export class StudentController {
     new GetAllStudents(this.studentRepository)
       .execute()
       .then(data => handleSuccess({ code: 200, message: 'Students list', res, data }))
-      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
+      .catch(error => handleError({ code: 500, message: error, res, error }))
   }
 
   public getStudentByID = (req: Request, res: Response) => {
     new GetStudentByID(this.studentRepository)
       .execute(req.params.id)
       .then(data => handleSuccess({ code: 200, message: `Student ${req.params.id} found`, res, data }))
-      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
+      .catch(error => handleError({ code: 500, message: error, res, error }))
 
   }
 
@@ -41,7 +41,7 @@ export class StudentController {
       .execute(createStudentDTO!)
       .then(student => handleSuccess({ code: 200, message: 'Student created', res, data: student }))
       .catch(error => {
-        handleError({ code: 500, message: 'Internal server error', res, error })
+        handleError({ code: 500, message: error, res, error })
       })
   }
 
@@ -59,7 +59,7 @@ export class StudentController {
     new DeleteStudent( this.studentRepository )
       .execute( req.params.id )
       .then(data => handleSuccess({ code: 200, message: `Students ${ req.params.id } deleted`, res, data }))
-      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
+      .catch(error => handleError({ code: 500, message: error, res, error }))
   }
 
 }

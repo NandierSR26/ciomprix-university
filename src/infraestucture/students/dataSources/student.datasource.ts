@@ -32,7 +32,7 @@ export class StudentDataSourceImplementation implements StudentDataSource {
       }
     });
 
-    if( !student ) throw new Error(`Student with ID ${id} not found`);
+    if( !student ) throw(`Student with ID ${id} not found`);
     return student;
   }
 

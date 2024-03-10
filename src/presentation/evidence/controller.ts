@@ -31,14 +31,13 @@ export class EvidencesController {
     new GetEvidenceByID(this.evidencesRepository)
       .execute(id)
       .then(data => handleSuccess({ code: 200, message: `Evidence with ID ${id} found`, res, data }))
-      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
+      .catch(error => handleError({ code: 500, message: error, res, error }))
   }
 
   public createEvidence = (req: Request, res: Response) => {
 
     const files = req.body.files as UploadedFile[];
     console.log(files)
-    return
 
     if (files.length > 5) throw new Error('You can only upload 5 files per subject')
     
@@ -52,7 +51,7 @@ export class EvidencesController {
     new CreateEvidence(this.evidencesRepository)
       .execute(createEvidenceDTO!)
       .then(data => handleSuccess({ code: 200, message: `Evidence created`, res, data }))
-      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
+      .catch(error => handleError({ code: 500, message: error, res, error }))
   }
 
   public updateEvidence = (req: Request, res: Response) => {
@@ -63,7 +62,7 @@ export class EvidencesController {
     new UpdateEvidence( this.evidencesRepository )
       .execute( updateEvidenceDTO! )
       .then(data => handleSuccess({ code: 200, message: `Evidence with ID ${id} updated`, res, data }))
-      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
+      .catch(error => handleError({ code: 500, message: error, res }))
 
   }
 
@@ -73,7 +72,7 @@ export class EvidencesController {
     new DeleteEvidence( this.evidencesRepository )
       .execute( id )
       .then(data => handleSuccess({ code: 200, message: `Evidence with ID ${id} deleted`, res, data }))
-      .catch(error => handleError({ code: 500, message: 'Internal server error', res, error }))
+      .catch(error => handleError({ code: 500, message: error, res }))
   }
 
 
