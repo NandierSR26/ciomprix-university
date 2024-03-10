@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { StudentRoutes } from './students/routes';
 
 export class AppRoutes {
 
@@ -10,6 +11,8 @@ export class AppRoutes {
     router.get('/index', (req, res) => {
       res.send({ message: 'Hola mundo' })
     })
+
+    router.use('/api/students', StudentRoutes.routes)
   
     return router;
   }
