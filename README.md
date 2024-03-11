@@ -13,11 +13,13 @@ proyecto para prueba tecnica.
 
 2. Ejecutar el comando ``` npm run dev ``` para inciar el proyecto
 
-3. en el archivo .env crear la variable DATABASE_URL y 
+3. Levantar la base de datos con las credenciales provisionadas en el documento
+
+4. en el archivo .env crear la variable DATABASE_URL y 
    asignarle la url de conexion proporcionada en el documento. 
    adicionalmente tambien el puerto y el JWT_SEED
 
-4. ejecutar comando ``` prisma migrate dev ```, con esto se creara la 
+5. ejecutar comando ``` prisma migrate dev ```, con esto se creara la 
    estructura de la base de datos a la semejanza del schema.
 
-5. Ejecutar el comando ``` prisma generate ```
+6. Ejecutar el comando ``` prisma generate ```
