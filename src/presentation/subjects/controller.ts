@@ -29,6 +29,12 @@ export class SubjectController {
   }
 
   public GetSubjectByID = (req: Request, res: Response) => {
+
+    const { id } = req.params;
+    const { user } = req.body;
+
+    if (user.id !== id) return handleError({ code: 401, message: 'You cannot access to this content', res });
+
     new GetSubjectByID(this.subjectRepository)
       .execute(req.params.id)
       .then(data => handleSuccess({ code: 200, message: 'Subjects found', res, data }))

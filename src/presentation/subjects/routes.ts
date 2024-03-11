@@ -16,12 +16,17 @@ export class SubjectRoutes {
     const router = Router();
 
     router.get('/', RolMiddleware.verifyUserRol, subjectController.getAllSubjects);
+
     router.get('/:id', subjectController.GetSubjectByID);
+
     router.get('/by-user/:id', subjectController.getSubjectsByUser);
-    router.get('/evidences/by-subject', subjectController.evidenceBySubject);
+
+    router.get('/evidences/by-subject', RolMiddleware.verifyUserRol, subjectController.evidenceBySubject);
 
     router.post('/', subjectController.CreateSubject);
-    router.post('/enroll', [ 
+
+    router.post('/enroll', [
+      RolMiddleware.verifyUserRol,
       ValidateEnroll.validateStudentInSubject,
       ValidateEnroll.validateAmountEnrolledSubject
     ], subjectController.enrollStudent);

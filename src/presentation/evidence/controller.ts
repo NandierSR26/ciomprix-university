@@ -15,7 +15,6 @@ export class EvidencesController {
   private validFormats = [
     'image/png',
     'image/jpg',
-    'image/jpeg',
     'application/pdf'
   ]
 

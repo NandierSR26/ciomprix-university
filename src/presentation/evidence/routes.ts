@@ -15,7 +15,9 @@ export class EvidencesRoutes {
     const evidencesController = new EvidencesController( evidencesRepository )
 
     router.get('/', evidencesController.getAllEvidences);
+
     router.get('/by-format', evidencesController.evidencesPercentageByFormat);
+
     router.get('/:id', evidencesController.getEvidenceByID);
 
     router.delete('/:id', evidencesController.deleteEvidence);
@@ -24,6 +26,7 @@ export class EvidencesRoutes {
       EvidencesMiddleware.validateEvidencesinSubjects,
       upload.single('evidence'),
     ], evidencesController.createEvidence);
+    
     router.put('/:id', upload.single('evidence'), evidencesController.updateEvidence);
 
     return router;
