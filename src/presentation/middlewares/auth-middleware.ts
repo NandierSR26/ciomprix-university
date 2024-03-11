@@ -2,6 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import { JwtAdapter } from "../../config/jwt.adapter";
 import { handleError } from "../../config/handleResponse";
 import { prisma } from "../../data/mysql/prisma";
+import { UserEntity } from "../../domain/auth/entities/user.entity";
+
+declare global {
+  namespace Express {
+      interface Request {
+          user?: UserEntity; // Aquí puedes ajustar el tipo según lo necesites
+      }
+  }
+}
 
 export class AuthMiddleware {
 
@@ -24,6 +33,7 @@ export class AuthMiddleware {
       if(!user) return handleError({ code: 401, message: 'Invalid token - user', res });
 
       req.body.user = user;
+      req.user = user;
       next();
     } catch (error) {
       handleError({ code: 500, message: 'Internal server error', res })
