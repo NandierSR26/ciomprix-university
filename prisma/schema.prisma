@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Students {
+  id String  @id @default(uuid())
+  DNI String @unique
+  first_name String
+  last_name String
+  email String @unique
+  password String
+  phone String
+  birth_date String
+  rol ValidRoles @default(STUDENT)
+  subjects Estudiantes_asignaturas[]
+  evidences Evidences[]
+}
+
+model Admin {
+  id String @id @default(uuid())
+  first_name String
+  last_name String
+  email String @unique
+  password String
+  rol ValidRoles @default(ADMIN)
+}
+
+model Subjects {
+  id String @id @default(uuid())
+  name String @unique
+  description String
+  students Estudiantes_asignaturas[]
+  evidences Evidences[]
+}
+
+model Estudiantes_asignaturas {
+  id_student String
+  id_subject String
+  student Students @relation(fields: [id_student], references: [id])
+  asignarura Subjects @relation(fields: [id_subject], references: [id])
+
+  @@id([id_student, id_subject])
+}
+
+model Evidences {
+  id String @id @default(uuid())
+  name String
+  size Int
+  format String
+  date String
+  subject Subjects @relation(fields: [subject_id], references: [id])
+  student Students @relation(fields: [student_id], references: [id])
+  subject_id String
+  student_id String
+}
+
+model Roles {
+  id String @id @default(uuid())
+  rol ValidRoles
+}
+
+enum ValidRoles {
+  ADMIN
+  STUDENT
+}
